@@ -1,6 +1,6 @@
 // Быстрая сортировка во внешней памяти
 // алгоритм отсюда https://www.slideserve.com/neka/external-quicksort
-// Входной файл input.txt и output.txt должны находиться в директории с исполняемым файлом
+// Входной файл task3_input.txt и task3_output.txt должны находиться в директории с исполняемым файлом
 
 #include <cstdio>
 #include <cstdlib>
@@ -155,7 +155,7 @@ void externalQuickSort(const char* input_file, const char* output_file) {
 }
 
 int main() {
-    const char* input_file = "input.txt";
-    const char* output_file = "output.txt";
+    const char* input_file = "task3_input.txt";
+    const char* output_file = "task3_output.txt";
     externalQuickSort(input_file, output_file);
 }
