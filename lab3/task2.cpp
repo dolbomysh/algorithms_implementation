@@ -29,6 +29,7 @@ std::pair<int, std::vector<size_t>> OptimalJobs(std::vector<Job> jobs) {
     std::vector<int> dp(total_time + 1, 0);
     std::vector<std::vector<bool>> used(jobs_number + 1, std::vector<bool>(total_time + 1, false));
 
+    // проход dp
     for (size_t i = 0; i < jobs_number; ++i) {
         for (int t = total_time; t >= 0; --t) {
             if (t + jobs[i].process_time <= jobs[i].deadline) {
@@ -72,9 +73,9 @@ std::pair<int, std::vector<size_t>> OptimalJobs(std::vector<Job> jobs) {
         }
     }
 
-    std::sort(late_jobs.begin(), late_jobs.end(), compare_weights);  // LDD порядок
+    std::sort(late_jobs.begin(), late_jobs.end(), compare_weights);
 
-    // Итоговое расписание: сначала G в порядке EDD, потом H в порядке LDD
+    // итоговое расписание
     std::vector<size_t> schedule;
     for (const Job& job : on_time_jobs) {
         schedule.push_back(job.job_number);
@@ -92,7 +93,7 @@ int main() {
     std::vector<Job> jobs(jobs_number);
 
     for (size_t i = 0; i < jobs_number; ++i) {
-        jobs[i].job_number = i + 1;  // Нумерация с 1
+        jobs[i].job_number = i + 1;
         std::cin >> jobs[i].process_time >> jobs[i].deadline >> jobs[i].weight;
     }
 
