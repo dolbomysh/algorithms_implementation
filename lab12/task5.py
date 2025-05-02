@@ -8,10 +8,25 @@ class DBConnection:
         except:
             print('Can`t establish connection to database')
 
-    def set_session_parameters(self, work_mem, maintenance_work_mem, random_page_cost):
-        self.cursor.execute(f"SET work_mem TO '{work_mem}';")
-        self.cursor.execute(f"SET maintenance_work_mem TO '{maintenance_work_mem}';")
-        self.cursor.execute(f"SET random_page_cost TO {random_page_cost};")
+    def set_config_parameter(self, parameter, value=None, scope='session', role=None, database=None):
+        try:
+            if scope == 'session':
+                self.cursor.execute(f"SET {parameter} TO '{value}';")
+
+            elif scope == 'role':
+                self.cursor.execute(f"ALTER ROLE {role} SET {parameter} TO '{value}';")
+
+            elif scope == 'database':
+                self.cursor.execute(f"ALTER DATABASE {database} SET {parameter} TO '{value}';")
+
+            elif scope == 'role_in_db':
+                self.cursor.execute(f"ALTER ROLE {role} IN DATABASE {database} SET {parameter} TO '{value}';")
+
+            self.conn.commit()
+
+        except Exception as exception:
+            print(f"Error setting parameter '{parameter}': {exception}")
+            self.conn.rollback()
 
     def execute_query(self, query, fetch=False):
         try:
@@ -35,7 +50,8 @@ class DBConnection:
 
 db = DBConnection(dbname="postgres", user="postgres", password="secret")
 
-db.set_session_parameters(work_mem="64MB", maintenance_work_mem="64MB", random_page_cost=1.5)
+db.set_config_parameter('random_page_cost', '1.5', scope='role', role='postgres')
+
 
 db.execute_query(""" CREATE TABLE users (
                     id SERIAL PRIMARY KEY,
