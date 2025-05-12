@@ -181,5 +181,4 @@ int main() {
     const char* input_file = "task3_input.txt";
     const char* output_file = "task3_output.txt";
     externalQuickSort(input_file, output_file);
-    return 0;
 }
